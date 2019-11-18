@@ -20,7 +20,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         imagePicker.delegate = self;
-       // imagePicker.sourceType = .camera;
+        // imagePicker.sourceType = .camera;
         imagePicker.sourceType = .photoLibrary
         imagePicker.allowsEditing = false;
     }
@@ -30,9 +30,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         if let userPickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
             imageView.image = userPickedImage;
+            
+            guard  let ciImage = CIImage(image: userPickedImage) else{
+                fatalError("Couldn't convert to CIImage");
+            }
         }
         
         imagePicker.dismiss(animated: true, completion:nil)
+        
+    }
+    
+    
+    func detect(image: CIImage){
+       guard let model = try? VNCoreMLModel(for: Inceptionv3().model) else {
+             fatalError("Model failed");
+        }
         
     }
     
